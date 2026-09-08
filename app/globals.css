@@ -1,0 +1,85 @@
+@import "tailwindcss";
+
+:root {
+  --navy-950: #061121;
+  --navy-900: #0A192F;
+  --navy-800: #112240;
+  --navy-700: #1D3557;
+  --navy-600: #254B77;
+  --navy-100: #E2E8F0;
+  --navy-50: #F8FAFC;
+
+  --gold-600: #B45309;
+  --gold-500: #D97706;
+  --gold-400: #F59E0B;
+  --gold-100: #FEF3C7;
+  --gold-50: #FFFBEB;
+
+  --market-green: #0D7A57;
+  --market-green-bg: #ECFDF5;
+  --market-red: #B91C1C;
+  --market-red-bg: #FEF2F2;
+
+  --background: #FFFFFF;
+  --foreground: #0F172A;
+}
+
+@theme {
+  --color-navy-950: var(--navy-950);
+  --color-navy-900: var(--navy-900);
+  --color-navy-800: var(--navy-800);
+  --color-navy-700: var(--navy-700);
+  --color-navy-600: var(--navy-600);
+  --color-navy-100: var(--navy-100);
+  --color-navy-50: var(--navy-50);
+
+  --color-gold-600: var(--gold-600);
+  --color-gold-500: var(--gold-500);
+  --color-gold-400: var(--gold-400);
+  --color-gold-100: var(--gold-100);
+  --color-gold-50: var(--gold-50);
+
+  --color-market-green: var(--market-green);
+  --color-market-green-bg: var(--market-green-bg);
+  --color-market-red: var(--market-red);
+  --color-market-red-bg: var(--market-red-bg);
+}
+
+html {
+  scroll-behavior: smooth;
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+body {
+  background-color: #FFFFFF;
+  color: #1E293B;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+::selection {
+  background-color: #FEF3C7;
+  color: #0A192F;
+}
+
+/* Accessible focus ring */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid #D97706;
+  outline-offset: 2px;
+}
+
+/* Subtle transitions for interactive elements */
+.transition-card {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.transition-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 28px -6px rgba(10, 25, 47, 0.08), 0 8px 16px -4px rgba(10, 25, 47, 0.04);
+}
