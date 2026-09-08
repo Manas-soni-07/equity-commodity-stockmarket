@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Menu, X, ArrowUpRight, TrendingUp, PhoneCall } from "lucide-react";
+import { Menu, X, ArrowUpRight, PhoneCall } from "lucide-react";
 import { COMPANY_DATA } from "@/data/company";
 
 interface NavLinkItem {
@@ -73,8 +74,15 @@ export default function Navbar() {
             className="group flex items-center gap-3 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-md"
             aria-label="Equity & Commodity Market Research Home"
           >
-            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-white shadow-md shadow-amber-900/30 group-hover:scale-105 transition-transform">
-              <TrendingUp className="w-5 h-5 text-white" />
+            <div className="relative w-16 h-14 rounded-lg overflow-hidden border border-amber-500/40 shadow-md shadow-amber-900/20 group-hover:scale-105 transition-transform bg-[#FDFBF7] shrink-0">
+              <Image
+                src="/logo/yogijilogo.jpeg"
+                alt="Equity & Commodity Market Research Logo"
+                fill
+                sizes="100px"
+                className="object-cover"
+                priority
+              />
             </div>
             <div className="flex flex-col">
               <span className="text-base sm:text-lg font-bold tracking-tight text-white leading-tight">

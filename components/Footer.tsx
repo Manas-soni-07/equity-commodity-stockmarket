@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import {
   TrendingUp,
   Mail,
@@ -99,8 +100,14 @@ export default function Footer() {
           {/* Brand Col (2 cols wide on large screen) */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center text-white shadow-md">
-                <TrendingUp className="w-5 h-5" />
+              <div className="relative w-10 h-10 rounded-lg overflow-hidden border border-amber-500/40 shadow-md bg-[#FDFBF7] shrink-0">
+                <Image
+                  src="/logo/yogijilogo.jpeg"
+                  alt="Equity & Commodity Market Research Logo"
+                  fill
+                  sizes="40px"
+                  className="object-cover"
+                />
               </div>
               <div>
                 <span className="text-lg font-bold text-white block leading-tight">
