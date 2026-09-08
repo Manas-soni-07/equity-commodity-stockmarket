@@ -34,8 +34,8 @@ export const COMPANY_DATA: CompanyInfo = {
   location: "India [City / State Placeholder]",
   operatingHours: "Monday to Friday: 8:30 AM – 6:00 PM IST (Saturday: 10:00 AM – 2:00 PM)",
   marketHours: "NSE & BSE Cash / F&O: 9:15 AM – 3:30 PM | MCX: 9:00 AM – 11:30/11:55 PM IST",
-  email: "contact@equitycommodityresearch.com [Editable Placeholder]",
-  phone: "+91 98XXX XXXXX [Editable Placeholder]",
+  email: "contact@equitycommodityresearch.com ",
+  phone: "+91 9876543210", // placeholder phone number
   whatsapp: "+919876543210", // placeholder phone number for WhatsApp link
   whatsappMessage: "Hello, I am interested in learning more about Equity & Commodity Market Research services.",
   address: "Financial District / Commercial Hub, India [Editable Address Placeholder]",
@@ -45,10 +45,10 @@ export const COMPANY_DATA: CompanyInfo = {
   disclaimerFull:
     "Equity & Commodity Market Research is an independent market research and analysis provider. All content, technical chart studies, indices observations, commodity overviews, and educational write-ups published on this platform are strictly prepared for informational and educational purposes. We DO NOT provide portfolio management services, tip services, or promise guaranteed returns of any kind. Trading and investing in securities and commodity derivatives involve substantial financial risk of loss. Users must perform their own due diligence or consult an authorized financial advisor before executing trades.",
   socialLinks: {
-    linkedin: "https://linkedin.com [Placeholder]",
+    linkedin: "https://linkedin.com ",
     x: "https://x.com [Placeholder]",
-    facebook: "https://facebook.com [Placeholder]",
-    youtube: "https://youtube.com [Placeholder]",
-    instagram: "https://instagram.com [Placeholder]",
+    facebook: "https://facebook.com",
+    youtube: "https://youtube.com ",
+    instagram: "https://instagram.com",
   },
 };

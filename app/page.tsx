@@ -4,13 +4,13 @@ import ServiceCard from "@/components/ServiceCard";
 import WhyChooseUs from "@/components/WhyChooseUs";
 import ResearchProcess from "@/components/ResearchProcess";
 import MarketCoverage from "@/components/MarketCoverage";
-import TestimonialCard from "@/components/TestimonialCard";
+import TestimonialsCarousel from "@/components/TestimonialsCarousel";
 import PricingCard from "@/components/PricingCard";
 import BlogCard from "@/components/BlogCard";
 import CTASection from "@/components/CTASection";
 import DisclaimerBanner from "@/components/DisclaimerBanner";
 import { SERVICES_DATA } from "@/data/services";
-import { TESTIMONIALS_DATA } from "@/data/testimonials";
+
 import { PRICING_PLANS } from "@/data/pricing";
 import { BLOGS_DATA } from "@/data/blogs";
 import { COMPANY_DATA } from "@/data/company";
@@ -233,32 +233,11 @@ export default function HomePage() {
       <MarketCoverage />
 
       {/* ==================================================
-          SECTION 7 — WHAT OUR CUSTOMERS SAY (Sample / Demo Reviews with Notice)
+          SECTION 7 — WHAT OUR CUSTOMERS SAY (Horizontal Scrolling Infinite Carousel)
           ================================================== */}
-      <section className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200/80">
+      <section className="py-16 sm:py-24 bg-slate-50 border-b border-slate-200/80 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-semibold uppercase tracking-wider mb-3">
-              Client Feedback
-            </div>
-            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight">
-              What Our Customers Say
-            </h2>
-            <p className="text-base sm:text-lg text-slate-600 mt-3 leading-relaxed">
-              Read sample reviews from market participants who utilize our research to understand Indian equity and commodity movements.
-            </p>
-            {/* Explicit Notice as per rules */}
-            <div className="mt-3 inline-block bg-slate-200/80 text-slate-600 text-xs px-3 py-1 rounded-full">
-              *Sample / Demo testimonials for layout presentation. Replace with verified client reviews upon launch.
-            </div>
-          </div>
-
-          {/* Testimonial Cards Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {TESTIMONIALS_DATA.map((t) => (
-              <TestimonialCard key={t.id} testimonial={t} />
-            ))}
-          </div>
+          <TestimonialsCarousel />
         </div>
       </section>
 

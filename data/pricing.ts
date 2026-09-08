@@ -18,7 +18,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     name: "Basic Research",
     popular: false,
     pricePlaceholder: "₹XXXX",
-    billingPeriod: "/ Month [Editable Placeholder]",
+    billingPeriod: "/ Month ",
     shortDescription: "Essential market insights and weekly overviews for independent learners and retail market followers.",
     features: [
       "Weekly Indian Equity & Market Summary",
@@ -42,7 +42,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     popular: true,
     badge: "Most Popular",
     pricePlaceholder: "₹XXXX",
-    billingPeriod: "/ Month [Editable Placeholder]",
+    billingPeriod: "/ Month",
     shortDescription: "Comprehensive daily research notes and sector analysis for active traders and dedicated market participants.",
     features: [
       "Daily pre-market note before 9:15 AM IST",

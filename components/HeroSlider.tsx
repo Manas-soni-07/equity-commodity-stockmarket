@@ -9,7 +9,12 @@ import { HERO_SLIDES } from "@/data/slider";
 export default function HeroSlider() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
+  const [isHovered, setIsHovered] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Touch gesture support for mobile swiping
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
 
   const nextSlide = useCallback(() => {
     setCurrentIndex((prev) => (prev === HERO_SLIDES.length - 1 ? 0 : prev + 1));
@@ -23,16 +28,52 @@ export default function HeroSlider() {
     setCurrentIndex(index);
   };
 
+  // Autoplay with 5.5s duration; loops infinitely
   useEffect(() => {
-    if (!isPaused) {
-      timerRef.current = setInterval(() => {
-        nextSlide();
-      }, 5500);
-    }
+    if (isPaused || isHovered) return;
+
+    timerRef.current = setInterval(() => {
+      nextSlide();
+    }, 5500);
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [isPaused, nextSlide]);
+  }, [isPaused, isHovered, nextSlide]);
+
+  // Desktop hover pause; mobile ignores hover to keep playing
+  const handleMouseEnter = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+      setIsHovered(true);
+    }
+  };
+
+  const handleMouseLeave = () => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover)").matches) {
+      setIsHovered(false);
+    }
+  };
+
+  // Touch swipe handlers
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchEndX.current = null;
+    touchStartX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    touchEndX.current = e.targetTouches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStartX.current || !touchEndX.current) return;
+    const distance = touchStartX.current - touchEndX.current;
+    const minSwipeDistance = 45;
+    if (distance > minSwipeDistance) {
+      nextSlide();
+    } else if (distance < -minSwipeDistance) {
+      prevSlide();
+    }
+  };
 
   // Keyboard navigation
   useEffect(() => {
@@ -48,16 +89,21 @@ export default function HeroSlider() {
 
   return (
     <section
-      className="relative w-full bg-[#061121] overflow-hidden select-none"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
+      className="relative w-full bg-slate-900 overflow-hidden select-none"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
+      onTouchEnd={handleTouchEnd}
       aria-label="Hero Carousel of Market Research Services"
     >
-      {/* Aspect Ratio Container: 600px on mobile, 660px on tablet, 720px on desktop */}
-      <div className="relative h-[560px] sm:h-[620px] lg:h-[700px] w-full">
+      {/* Full-width container: 620-660px on mobile, 700-740px on desktop */}
+      <div className="relative h-[620px] sm:h-[660px] lg:h-[730px] w-full">
         {/* Slides rendering */}
         {HERO_SLIDES.map((slide, index) => {
           const isActive = index === currentIndex;
+          const isContentRight = slide.contentPosition === "right";
+
           return (
             <div
               key={slide.id}
@@ -66,68 +112,102 @@ export default function HeroSlider() {
               }`}
               aria-hidden={!isActive}
             >
-              {/* Background Image with Next.js Image */}
-              <div className="relative w-full h-full">
+              {/* Layer 0: Background Cinematic Image */}
+              <div className="absolute inset-0 overflow-hidden z-0">
                 <Image
                   src={slide.imageUrl}
                   alt={slide.imageAlt}
                   fill
                   priority={index === 0}
-                  className="object-cover object-center transform scale-105 transition-transform duration-[6000ms] ease-out"
-                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 100vw, 100vw"
+                  className={`hero-slider-img object-cover ${
+                    isActive ? "hero-ken-burns" : "scale-100"
+                  }`}
+                  style={
+                    {
+                      "--pos-desktop": slide.objectPosition || "center center",
+                      "--pos-mobile": slide.mobileObjectPosition || slide.objectPosition || "center center",
+                    } as React.CSSProperties
+                  }
+                  sizes="100vw"
                 />
-                {/* Premium Gradient Overlay: Deep Navy gradient for perfect contrast and readability */}
-                <div className="absolute inset-0 bg-gradient-to-r from-[#061121]/95 via-[#0A192F]/85 to-[#061121]/60" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#061121] via-transparent to-transparent opacity-80" />
               </div>
 
-              {/* Slide Content */}
-              <div className="absolute inset-0 flex items-center">
+              {/* Layer 1: Subtle Premium Light/White Research Theme Overlay */}
+              <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+                {isContentRight ? (
+                  <>
+                    {/* Desktop: Gentle white gradient concentrated behind text on the right */}
+                    <div className="hidden md:block absolute inset-0 bg-gradient-to-l from-white/95 via-white/80 via-45% to-white/10" />
+                    {/* Mobile: Gradient concentrated from bottom up */}
+                    <div className="md:hidden absolute inset-0 bg-gradient-to-t from-white/98 via-white/90 via-60% to-white/30" />
+                  </>
+                ) : (
+                  <>
+                    {/* Desktop: Gentle white gradient concentrated behind text on the left */}
+                    <div className="hidden md:block absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 via-45% to-white/10" />
+                    {/* Mobile: Gradient concentrated from bottom up */}
+                    <div className="md:hidden absolute inset-0 bg-gradient-to-t from-white/98 via-white/90 via-60% to-white/30" />
+                  </>
+                )}
+
+                {/* Soft top border fade and bottom blend into the page */}
+                <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-slate-900/10 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 h-20 bg-gradient-to-t from-white via-white/50 to-transparent" />
+              </div>
+
+              {/* Layer 2: Slide Content */}
+              <div className="absolute inset-0 z-20 flex items-center">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-                  <div className="max-w-2xl lg:max-w-3xl space-y-5 sm:space-y-6">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-amber-400/15 border border-amber-400/30 backdrop-blur-sm">
-                      <span className="w-2 h-2 rounded-full bg-amber-400"></span>
-                      <span className="text-xs sm:text-sm font-semibold tracking-wide text-amber-300 uppercase">
-                        {slide.badge}
-                      </span>
-                    </div>
+                  <div className={`flex w-full ${isContentRight ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[600px] w-full p-5 sm:p-7 lg:p-8 rounded-2xl bg-white/70 sm:bg-white/55 backdrop-blur-md border border-white/80 shadow-xl shadow-slate-900/5 transition-all duration-700 ease-out ${
+                        isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+                      }`}
+                    >
+                      {/* Badge */}
+                      <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-500/10 border border-amber-400/40 shadow-xs">
+                        <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+                        <span className="text-xs sm:text-sm font-bold tracking-wider text-amber-900 uppercase">
+                          {slide.badge}
+                        </span>
+                      </div>
 
-                    {/* Main Title */}
-                    <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.15]">
-                      {slide.title}
-                    </h1>
+                      {/* Main Title */}
+                      <h1 className="mt-3.5 sm:mt-4 text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0A192F] tracking-tight leading-[1.15]">
+                        {slide.title}
+                      </h1>
 
-                    {/* Subtitle */}
-                    <p className="text-base sm:text-lg lg:text-xl text-slate-300 font-normal leading-relaxed max-w-2xl">
-                      {slide.subtitle}
-                    </p>
+                      {/* Subtitle */}
+                      <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg text-slate-700 font-normal leading-relaxed">
+                        {slide.subtitle}
+                      </p>
 
-                    {/* CTAs */}
-                    <div className="pt-2 flex flex-wrap items-center gap-3 sm:gap-4">
-                      <Link
-                        href={slide.primaryCtaLink}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm sm:text-base font-semibold text-[#0A192F] bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 shadow-lg shadow-amber-500/25 transition-all duration-200 group"
-                      >
-                        <span>{slide.primaryCtaText}</span>
-                        <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                      </Link>
+                      {/* CTAs */}
+                      <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
+                        <Link
+                          href={slide.primaryCtaLink}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl text-sm sm:text-base font-semibold text-[#0A192F] bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-500 hover:to-amber-600 shadow-md shadow-amber-500/20 hover:shadow-lg transition-all duration-200 group"
+                        >
+                          <span>{slide.primaryCtaText}</span>
+                          <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                        </Link>
 
-                      <Link
-                        href={slide.secondaryCtaLink}
-                        className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-lg text-sm sm:text-base font-semibold text-white bg-slate-800/80 hover:bg-slate-700/90 border border-slate-700/80 backdrop-blur-sm transition-all duration-200"
-                      >
-                        <span>{slide.secondaryCtaText}</span>
-                      </Link>
-                    </div>
+                        <Link
+                          href={slide.secondaryCtaLink}
+                          className="inline-flex items-center justify-center gap-2 px-5 py-3 sm:px-6 sm:py-3.5 rounded-xl text-sm sm:text-base font-semibold text-slate-800 bg-white/90 hover:bg-white border border-slate-300 hover:border-slate-400 shadow-xs transition-all duration-200"
+                        >
+                          <span>{slide.secondaryCtaText}</span>
+                        </Link>
+                      </div>
 
-                    {/* Micro trust note */}
-                    <div className="pt-2 text-xs text-slate-400 flex items-center gap-3">
-                      <span>✓ NSE & BSE Equities</span>
-                      <span>•</span>
-                      <span>✓ MCX Commodities</span>
-                      <span>•</span>
-                      <span>✓ Non-Advisory Research</span>
+                      {/* Micro trust note */}
+                      <div className="mt-4 pt-3 border-t border-slate-200/60 text-xs text-slate-600 font-medium flex flex-wrap items-center gap-2 sm:gap-3">
+                        <span className="inline-flex items-center gap-1 text-slate-700">✓ NSE & BSE Equities</span>
+                        <span>•</span>
+                        <span className="inline-flex items-center gap-1 text-slate-700">✓ MCX Commodities</span>
+                        <span>•</span>
+                        <span className="inline-flex items-center gap-1 text-slate-700">✓ Non-Advisory Research</span>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -136,12 +216,12 @@ export default function HeroSlider() {
           );
         })}
 
-        {/* Previous & Next Slide Controls */}
-        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 sm:px-6 pointer-events-none z-20">
+        {/* Previous & Next Slide Controls (z-30) */}
+        <div className="absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2 sm:px-6 pointer-events-none z-30">
           <button
             onClick={prevSlide}
             type="button"
-            className="pointer-events-auto p-2.5 sm:p-3 rounded-full bg-[#0A192F]/70 hover:bg-amber-500 hover:text-[#0A192F] text-white border border-slate-700/60 backdrop-blur-md transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+            className="pointer-events-auto p-2.5 sm:p-3 rounded-full bg-white/80 hover:bg-white text-slate-800 hover:text-[#0A192F] border border-slate-200/90 backdrop-blur-md transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             aria-label="Previous slide"
           >
             <ChevronLeft className="w-5 h-5 sm:w-6 sm:h-6" />
@@ -149,26 +229,26 @@ export default function HeroSlider() {
           <button
             onClick={nextSlide}
             type="button"
-            className="pointer-events-auto p-2.5 sm:p-3 rounded-full bg-[#0A192F]/70 hover:bg-amber-500 hover:text-[#0A192F] text-white border border-slate-700/60 backdrop-blur-md transition-all shadow-md focus:outline-none focus:ring-2 focus:ring-amber-400"
+            className="pointer-events-auto p-2.5 sm:p-3 rounded-full bg-white/80 hover:bg-white text-slate-800 hover:text-[#0A192F] border border-slate-200/90 backdrop-blur-md transition-all duration-200 shadow-md hover:shadow-lg hover:scale-105 active:scale-95 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
             aria-label="Next slide"
           >
             <ChevronRight className="w-5 h-5 sm:w-6 sm:h-6" />
           </button>
         </div>
 
-        {/* Bottom Bar: Indicators & Slide Counter */}
-        <div className="absolute bottom-6 left-0 right-0 z-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            {/* Dots navigation */}
-            <div className="flex items-center gap-2 overflow-x-auto py-1 max-w-full">
+        {/* Bottom Navigation Bar: Indicators & Slide Tracker (z-30) */}
+        <div className="absolute bottom-4 sm:bottom-6 left-0 right-0 z-30 pointer-events-none">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 sm:gap-4">
+            {/* 9 Indicator Dots */}
+            <div className="pointer-events-auto flex items-center gap-1.5 sm:gap-2 p-1.5 sm:p-2 rounded-full bg-white/85 backdrop-blur-md border border-slate-200/90 shadow-sm">
               {HERO_SLIDES.map((slide, idx) => (
                 <button
                   key={slide.id}
                   onClick={() => goToSlide(idx)}
-                  className={`group relative rounded-full transition-all duration-300 focus:outline-none ${
+                  className={`group relative rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
                     idx === currentIndex
-                      ? "w-8 sm:w-10 h-2.5 bg-amber-400"
-                      : "w-2.5 h-2.5 bg-slate-600 hover:bg-slate-400"
+                      ? "w-7 sm:w-9 h-2.5 bg-gradient-to-r from-amber-500 to-amber-600 shadow-xs"
+                      : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500"
                   }`}
                   aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
                   aria-current={idx === currentIndex ? "true" : "false"}
@@ -176,22 +256,22 @@ export default function HeroSlider() {
               ))}
             </div>
 
-            {/* Slide Index Counter & Pause/Play */}
-            <div className="flex items-center gap-3 bg-[#0A192F]/80 backdrop-blur-md px-3.5 py-1.5 rounded-full border border-slate-800 text-xs font-mono text-slate-300">
+            {/* Slide Counter & Pause/Play */}
+            <div className="pointer-events-auto flex items-center gap-3 bg-white/85 backdrop-blur-md px-4 py-1.5 rounded-full border border-slate-200/90 text-xs font-mono text-slate-700 shadow-sm">
               <button
                 type="button"
                 onClick={() => setIsPaused(!isPaused)}
-                className="hover:text-amber-400 transition-colors"
+                className="p-1 rounded-full hover:bg-slate-100 text-slate-700 hover:text-amber-600 transition-colors focus:outline-none"
                 aria-label={isPaused ? "Play auto slider" : "Pause auto slider"}
-                title={isPaused ? "Resume auto play" : "Pause auto play"}
+                title={isPaused ? "Resume autoplay" : "Pause autoplay"}
               >
-                {isPaused ? <Play className="w-3.5 h-3.5" /> : <Pause className="w-3.5 h-3.5" />}
+                {isPaused ? <Play className="w-3.5 h-3.5 fill-current" /> : <Pause className="w-3.5 h-3.5 fill-current" />}
               </button>
-              <span>
+              <span className="font-semibold text-slate-900">
                 Slide {String(currentIndex + 1).padStart(2, "0")} / {String(HERO_SLIDES.length).padStart(2, "0")}
               </span>
-              <span className="text-amber-400 hidden sm:inline">•</span>
-              <span className="text-slate-400 hidden sm:inline">{currentSlide.tag}</span>
+              <span className="text-amber-500 hidden sm:inline">•</span>
+              <span className="text-slate-600 font-sans font-medium hidden sm:inline">{currentSlide.tag}</span>
             </div>
           </div>
         </div>
@@ -199,3 +279,4 @@ export default function HeroSlider() {
     </section>
   );
 }
+
