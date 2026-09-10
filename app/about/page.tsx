@@ -141,15 +141,7 @@ export default function AboutPage() {
                     </span>
                   </div>
 
-                  <div className="flex items-start justify-between gap-4">
-                    <span className="text-slate-500 font-medium flex items-center gap-2">
-                      <FileText className="w-4 h-4 text-amber-600 shrink-0" />
-                      Company Details:
-                    </span>
-                    <span className="font-medium text-right text-slate-500">
-                      [Editable Registration Placeholders]
-                    </span>
-                  </div>
+            
                 </div>
 
                 <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg text-[11px] text-amber-900 leading-relaxed">

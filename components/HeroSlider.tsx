@@ -107,9 +107,8 @@ export default function HeroSlider() {
           return (
             <div
               key={slide.id}
-              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${
-                isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
-              }`}
+              className={`absolute inset-0 transition-opacity duration-1000 ease-in-out ${isActive ? "opacity-100 z-10 pointer-events-auto" : "opacity-0 z-0 pointer-events-none"
+                }`}
               aria-hidden={!isActive}
             >
               {/* Layer 0: Background Cinematic Image */}
@@ -119,9 +118,8 @@ export default function HeroSlider() {
                   alt={slide.imageAlt}
                   fill
                   priority={index === 0}
-                  className={`hero-slider-img object-cover ${
-                    isActive ? "hero-ken-burns" : "scale-100"
-                  }`}
+                  className={`hero-slider-img object-cover ${isActive ? "hero-ken-burns" : "scale-100"
+                    }`}
                   style={
                     {
                       "--pos-desktop": slide.objectPosition || "center center",
@@ -133,7 +131,7 @@ export default function HeroSlider() {
               </div>
 
               {/* Layer 1: Subtle Premium Light/White Research Theme Overlay */}
-              <div className="absolute inset-0 z-10 pointer-events-none overflow-hidden">
+              <div className="absolute pointer-events-none overflow-hidden">
                 {isContentRight ? (
                   <>
                     {/* Desktop: Gentle white gradient concentrated behind text on the right */}
@@ -157,14 +155,13 @@ export default function HeroSlider() {
 
               {/* Layer 2: Slide Content */}
               <div className="absolute inset-0 z-20 flex items-center">
-                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
+                {/* <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
                   <div className={`flex w-full ${isContentRight ? "justify-end" : "justify-start"}`}>
                     <div
-                      className={`max-w-[600px] w-full p-5 sm:p-7 lg:p-8 rounded-2xl bg-white/70 sm:bg-white/55 backdrop-blur-md border border-white/80 shadow-xl shadow-slate-900/5 transition-all duration-700 ease-out ${
-                        isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
-                      }`}
+                      className={`max-w-[600px] w-full p-5 sm:p-7 lg:p-8 rounded-2xl bg-white/70 sm:bg-white/55 backdrop-blur-md border border-white/80 shadow-xl shadow-slate-900/5 transition-all duration-700 ease-out ${isActive ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4 pointer-events-none"
+                        }`}
                     >
-                      {/* Badge */}
+  
                       <div className="inline-flex items-center gap-2 px-3 py-1 sm:px-3.5 sm:py-1.5 rounded-full bg-amber-500/10 border border-amber-400/40 shadow-xs">
                         <span className="w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
                         <span className="text-xs sm:text-sm font-bold tracking-wider text-amber-900 uppercase">
@@ -172,17 +169,17 @@ export default function HeroSlider() {
                         </span>
                       </div>
 
-                      {/* Main Title */}
+                     
                       <h1 className="mt-3.5 sm:mt-4 text-2xl sm:text-4xl lg:text-[42px] font-extrabold text-[#0A192F] tracking-tight leading-[1.15]">
                         {slide.title}
                       </h1>
 
-                      {/* Subtitle */}
+                   
                       <p className="mt-2.5 sm:mt-3 text-sm sm:text-base lg:text-lg text-slate-700 font-normal leading-relaxed">
                         {slide.subtitle}
                       </p>
 
-                      {/* CTAs */}
+                 
                       <div className="mt-5 sm:mt-6 flex flex-wrap items-center gap-3 sm:gap-4">
                         <Link
                           href={slide.primaryCtaLink}
@@ -200,7 +197,7 @@ export default function HeroSlider() {
                         </Link>
                       </div>
 
-                      {/* Micro trust note */}
+                     
                       <div className="mt-4 pt-3 border-t border-slate-200/60 text-xs text-slate-600 font-medium flex flex-wrap items-center gap-2 sm:gap-3">
                         <span className="inline-flex items-center gap-1 text-slate-700">✓ NSE & BSE Equities</span>
                         <span>•</span>
@@ -210,7 +207,7 @@ export default function HeroSlider() {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
           );
@@ -245,11 +242,10 @@ export default function HeroSlider() {
                 <button
                   key={slide.id}
                   onClick={() => goToSlide(idx)}
-                  className={`group relative rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${
-                    idx === currentIndex
+                  className={`group relative rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${idx === currentIndex
                       ? "w-7 sm:w-9 h-2.5 bg-gradient-to-r from-amber-500 to-amber-600 shadow-xs"
                       : "w-2.5 h-2.5 bg-slate-300 hover:bg-slate-500"
-                  }`}
+                    }`}
                   aria-label={`Go to slide ${idx + 1}: ${slide.title}`}
                   aria-current={idx === currentIndex ? "true" : "false"}
                 />

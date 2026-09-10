@@ -48,9 +48,35 @@ export default function PricingPage() {
             </p>
           </div>
 
+          {/* First Plan: Full Width Basic Research */}
+          {PRICING_PLANS[0] && (
+            <div className="max-w-6xl mx-auto mb-12 sm:mb-14">
+              <PricingCard plan={PRICING_PLANS[0]} fullWidth />
+            </div>
+          )}
+
+          {/* Section Sub-divider for Professional Tiers */}
+          <div className="mt-4 mb-8 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white border border-slate-200 text-slate-800 text-xs font-bold uppercase tracking-wider mb-2 shadow-xs">
+              Capital-Based Research Programs
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Professional Research Tiers
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+              Structured analysis across Equity, Nifty, Bank Nifty & Commodities, tailored to your trading capital.
+            </p>
+          </div>
+
+          {/* Last 3 Plans: 3 Columns Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-            {PRICING_PLANS.map((plan) => (
-              <PricingCard key={plan.id} plan={plan} />
+            {PRICING_PLANS.slice(1).map((plan, idx) => (
+              <PricingCard
+                key={`${plan.id}-${idx}`}
+                plan={plan}
+                tierIndex={idx}
+                isMiddleFeatured={idx === 1}
+              />
             ))}
           </div>
 

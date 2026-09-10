@@ -31,7 +31,7 @@ export const COMPANY_DATA: CompanyInfo = {
   secondaryTagline: "Simple, Research-Based Insights for Indian Equity & Commodity Markets.",
   description:
     "Equity & Commodity Market Research provides research-based insights across Indian equities, indices and commodities. Our aim is to make market information simple, useful and easy to understand for market participants, investors, and analysts.",
-  location: "India [City / State Placeholder]",
+  location: "India",
   operatingHours: "Monday to Friday: 8:30 AM – 6:00 PM IST (Saturday: 10:00 AM – 2:00 PM)",
   marketHours: "NSE & BSE Cash / F&O: 9:15 AM – 3:30 PM | MCX: 9:00 AM – 11:30/11:55 PM IST",
   email: "contact@equitycommodityresearch.com ",

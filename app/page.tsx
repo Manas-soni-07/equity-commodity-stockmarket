@@ -242,11 +242,11 @@ export default function HomePage() {
       </section>
 
       {/* ==================================================
-          SECTION 8 — PRICING PREVIEW (3 Plans with Editable ₹XXXX)
+          SECTION 8 — PRICING PREVIEW
           ================================================== */}
       <section className="py-16 sm:py-24 bg-white border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-14">
+          <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-14">
             <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-100 text-amber-900 text-xs font-semibold uppercase tracking-wider mb-3">
               Subscription Tiers
             </div>
@@ -258,15 +258,40 @@ export default function HomePage() {
             </p>
           </div>
 
-          {/* 3 Pricing Cards */}
+          {/* First Plan: Full-Width Card */}
+          {PRICING_PLANS[0] && (
+            <div className="max-w-6xl mx-auto mb-12 sm:mb-14">
+              <PricingCard plan={PRICING_PLANS[0]} fullWidth />
+            </div>
+          )}
+
+          {/* Section Sub-divider for Professional Tiers */}
+          <div className="mt-4 mb-8 text-center max-w-2xl mx-auto">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-slate-100 text-slate-800 text-xs font-bold uppercase tracking-wider mb-2">
+              Capital-Based Research Programs
+            </div>
+            <h3 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
+              Professional Research Tiers
+            </h3>
+            <p className="text-xs sm:text-sm text-slate-600 mt-1.5 leading-relaxed">
+              Structured analysis across Equity, Nifty, Bank Nifty & Commodities, tailored to your trading capital.
+            </p>
+          </div>
+
+          {/* Last 3 Plans: 3 Columns Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 max-w-6xl mx-auto items-stretch">
-            {PRICING_PLANS.map((plan) => (
-              <PricingCard key={plan.id} plan={plan} />
+            {PRICING_PLANS.slice(1).map((plan, idx) => (
+              <PricingCard
+                key={`${plan.id}-${idx}`}
+                plan={plan}
+                tierIndex={idx}
+                isMiddleFeatured={idx === 1}
+              />
             ))}
           </div>
 
           {/* Custom plan prompt */}
-          <div className="mt-12 text-center p-6 bg-slate-50 border border-slate-200 rounded-2xl max-w-2xl mx-auto">
+          {/* <div className="mt-14 text-center p-6 sm:p-8 bg-slate-50 border border-slate-200 rounded-2xl max-w-2xl mx-auto shadow-xs">
             <h4 className="text-base font-bold text-slate-900">
               Need a custom plan or bespoke corporate research mandate?
             </h4>
@@ -279,7 +304,7 @@ export default function HomePage() {
             >
               <span>Contact our team for a custom quote →</span>
             </Link>
-          </div>
+          </div> */}
         </div>
       </section>
 
